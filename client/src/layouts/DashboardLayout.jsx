@@ -17,6 +17,7 @@ const DashboardLayout = ({ children }) => {
     { path: '/dashboard', label: 'Dashboard', icon: '📊' },
     { path: '/expenses', label: 'Expenses', icon: '💰' },
     { path: '/budgets', label: 'Budgets', icon: '💳' },
+    { path: '/analytics', label: 'Analytics', icon: '📈' },
     { path: '/profile', label: 'Profile', icon: '👤' },
   ];
 

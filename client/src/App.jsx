@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Expenses from './pages/Expenses';
 import Budgets from './pages/Budgets';
+import Analytics from './pages/Analytics';
 import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { restoreSession } from './store/authSlice';
@@ -72,6 +73,12 @@ function App() {
           path="/budgets"
           element={
             <ProtectedRoute element={<DashboardLayout><Budgets /></DashboardLayout>} />
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute element={<DashboardLayout><Analytics /></DashboardLayout>} />
           }
         />
         <Route
