@@ -106,25 +106,70 @@ const Dashboard = () => {
         <p className="text-slate-600 mt-2">Here's your financial overview for this month.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-          <h3 className="text-sm font-medium text-slate-500 mb-2">Total Expenses</h3>
-          <p className="text-3xl font-bold text-slate-800">{formatCurrency(totalExpenses)}</p>
-          <p className="text-xs text-slate-400 mt-2">This month</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-5 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-slate-500 mb-1">Total Expenses</h3>
+            <p className="text-2xl font-bold text-slate-800">{formatCurrency(totalExpenses)}</p>
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-          <h3 className="text-sm font-medium text-slate-500 mb-2">Total Budget</h3>
-          <p className="text-3xl font-bold text-slate-800">{formatCurrency(totalBudget)}</p>
-          <p className="text-xs text-slate-400 mt-2">This month</p>
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-5 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-slate-500 mb-1">Total Budget</h3>
+            <p className="text-2xl font-bold text-slate-800">{formatCurrency(totalBudget)}</p>
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-          <h3 className="text-sm font-medium text-slate-500 mb-2">Remaining Budget</h3>
-          <p className={`text-3xl font-bold ${remainingBudget < 0 ? 'text-red-600' : 'text-green-600'}`}>
-            {formatCurrency(remainingBudget)}
-          </p>
-          <p className="text-xs text-slate-400 mt-2">This month</p>
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-5 flex items-center gap-4">
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${remainingBudget < 0 ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-slate-500 mb-1">Remaining Budget</h3>
+            <p className={`text-2xl font-bold ${remainingBudget < 0 ? 'text-red-600' : 'text-slate-800'}`}>
+              {formatCurrency(remainingBudget)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 className="text-lg font-semibold text-slate-800 mb-4">Quick Actions</h2>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            to="/expenses"
+            className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition shadow-sm font-medium text-sm"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+            Add Expense
+          </Link>
+          <Link
+            to="/budgets"
+            className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition shadow-sm font-medium text-sm"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            View Budgets
+          </Link>
+          <Link
+            to="/analytics"
+            className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition shadow-sm font-medium text-sm"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+            Analytics
+          </Link>
         </div>
       </div>
 

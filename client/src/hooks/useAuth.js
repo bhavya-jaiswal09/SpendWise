@@ -14,7 +14,7 @@ export const useAuth = () => {
   const { user, isAuthenticated, loading, error } = useSelector((state) => state.auth);
 
   const logout = () => {
-    dispatch(logoutUser());
+    return dispatch(logoutUser());
   };
 
   return {
