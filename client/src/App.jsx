@@ -1,24 +1,26 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import AppShell from './layouts/AppShell';
+import AuthLayout from './layouts/AuthLayout';
+import DashboardLayout from './layouts/DashboardLayout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ProtectedTest from './pages/ProtectedTest';
+import Dashboard from './pages/Dashboard';
+import Expenses from './pages/Expenses';
+import Budgets from './pages/Budgets';
+import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { restoreSession } from './store/authSlice';
 
 function App() {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.auth);
+  const { loading, isAuthenticated } = useSelector((state) => state.auth);
 
-  // Restore authentication session on app load
   useEffect(() => {
     dispatch(restoreSession());
   }, [dispatch]);
 
-  // Show loading state while checking authentication
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -32,19 +34,77 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AppShell>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/protected"
-            element={<ProtectedRoute element={<ProtectedTest />} />}
-          />
-          {/* Catch-all: redirect unknown routes to home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AppShell>
+      <Routes>
+        {/* Unauthenticated Routes */}
+        {!isAuthenticated && (
+          <>
+            <Route
+              path="/"
+              element={
+                <AuthLayout>
+                  <Landing />
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <AuthLayout>
+                  <Login />
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <AuthLayout>
+                  <Register />
+                </AuthLayout>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        )}
+
+        {/* Authenticated Routes */}
+        {isAuthenticated && (
+          <>
+            <Route
+              path="/dashboard"
+              element={
+                <DashboardLayout>
+                  <Dashboard />
+                </DashboardLayout>
+              }
+            />
+            <Route
+              path="/expenses"
+              element={
+                <DashboardLayout>
+                  <Expenses />
+                </DashboardLayout>
+              }
+            />
+            <Route
+              path="/budgets"
+              element={
+                <DashboardLayout>
+                  <Budgets />
+                </DashboardLayout>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <DashboardLayout>
+                  <Profile />
+                </DashboardLayout>
+              }
+            />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </>
+        )}
+      </Routes>
     </BrowserRouter>
   );
 }
