@@ -11,8 +11,8 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await authService.register(userData);
       // Save token to localStorage
-      authService.setToken(response.data.token);
-      return response.data;
+      authService.setToken(response.data.data.token);
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || 'Registration failed'
@@ -27,8 +27,8 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await authService.login(credentials);
       // Save token to localStorage
-      authService.setToken(response.data.token);
-      return response.data;
+      authService.setToken(response.data.data.token);
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || 'Login failed'
@@ -43,13 +43,13 @@ export const restoreSession = createAsyncThunk(
     try {
       // Check if token exists in localStorage
       const token = authService.getToken();
-      if (!token) {
+      if (!token || token === 'undefined') {
         return rejectWithValue('No token found');
       }
 
       // Verify token is still valid by fetching current user
       const response = await authService.getCurrentUser();
-      return response.data;
+      return response.data.data;
     } catch (error) {
       // Token is invalid or expired
       authService.removeToken();
@@ -78,6 +78,7 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   loading: false,
+  isInitializing: true,
   error: null,
 };
 
@@ -133,16 +134,16 @@ const authSlice = createSlice({
     // Restore Session
     builder
       .addCase(restoreSession.pending, (state) => {
-        state.loading = true;
+        state.isInitializing = true;
       })
       .addCase(restoreSession.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isInitializing = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.error = null;
       })
       .addCase(restoreSession.rejected, (state) => {
-        state.loading = false;
+        state.isInitializing = false;
         state.isAuthenticated = false;
         state.user = null;
       });

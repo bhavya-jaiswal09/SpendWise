@@ -15,13 +15,13 @@ import { restoreSession } from './store/authSlice';
 
 function App() {
   const dispatch = useDispatch();
-  const { loading, isAuthenticated } = useSelector((state) => state.auth);
+  const { isInitializing, isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(restoreSession());
   }, [dispatch]);
 
-  if (loading) {
+  if (isInitializing) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -35,75 +35,54 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Unauthenticated Routes */}
-        {!isAuthenticated && (
-          <>
-            <Route
-              path="/"
-              element={
-                <AuthLayout>
-                  <Landing />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <AuthLayout>
-                  <Login />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <AuthLayout>
-                  <Register />
-                </AuthLayout>
-              }
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </>
-        )}
+        {/* Public / Auth Routes */}
+        <Route 
+          path="/" 
+          element={
+            isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthLayout><Landing /></AuthLayout>
+          } 
+        />
+        <Route 
+          path="/login" 
+          element={
+            isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthLayout><Login /></AuthLayout>
+          } 
+        />
+        <Route 
+          path="/register" 
+          element={
+            isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthLayout><Register /></AuthLayout>
+          } 
+        />
 
-        {/* Authenticated Routes */}
-        {isAuthenticated && (
-          <>
-            <Route
-              path="/dashboard"
-              element={
-                <DashboardLayout>
-                  <Dashboard />
-                </DashboardLayout>
-              }
-            />
-            <Route
-              path="/expenses"
-              element={
-                <DashboardLayout>
-                  <Expenses />
-                </DashboardLayout>
-              }
-            />
-            <Route
-              path="/budgets"
-              element={
-                <DashboardLayout>
-                  <Budgets />
-                </DashboardLayout>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <DashboardLayout>
-                  <Profile />
-                </DashboardLayout>
-              }
-            />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </>
-        )}
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute element={<DashboardLayout><Dashboard /></DashboardLayout>} />
+          }
+        />
+        <Route
+          path="/expenses"
+          element={
+            <ProtectedRoute element={<DashboardLayout><Expenses /></DashboardLayout>} />
+          }
+        />
+        <Route
+          path="/budgets"
+          element={
+            <ProtectedRoute element={<DashboardLayout><Budgets /></DashboardLayout>} />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute element={<DashboardLayout><Profile /></DashboardLayout>} />
+          }
+        />
+        
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace />} />
       </Routes>
     </BrowserRouter>
   );
