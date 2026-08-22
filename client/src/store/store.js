@@ -1,15 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './authSlice';
 
 /**
  * Root Redux store.
  *
- * No feature slices are added yet — this only confirms that
- * Redux Toolkit is wired up correctly. Business-related slices
- * (auth, transactions, budgets, etc.) will be added in their
- * respective phases.
+ * authSlice - Authentication state management
+ * Future slices: transactions, budgets, goals, etc. (in later phases)
  */
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    auth: authReducer,
+  },
 });
 
 export default store;

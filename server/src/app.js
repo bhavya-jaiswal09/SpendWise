@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const healthRoutes = require('./routes/health.routes');
+const authRoutes = require('./routes/authRoutes');
+const testRoutes = require('./routes/testRoutes');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 
 const app = express();
@@ -12,6 +14,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/health', healthRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/test', testRoutes);
 
 // 404 handler (must come after all valid routes)
 app.use(notFound);
