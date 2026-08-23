@@ -93,7 +93,7 @@ const DashboardLayout = ({ children }) => {
       <div className="flex-1 flex flex-col w-full md:w-auto">
         {/* Header */}
         <header className="border-b border-slate-200 bg-white sticky top-0 z-30">
-          <div className="px-4 md:px-8 py-4">
+          <div className="px-4 md:px-8 py-4 pl-16 md:pl-8">
             <h1 className="text-lg font-semibold text-slate-800">
               {navItems.find((item) => isActive(item.path))?.label || 'Dashboard'}
             </h1>

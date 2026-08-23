@@ -13,7 +13,6 @@ import { useSelector } from 'react-redux';
 const ProtectedRoute = ({ element }) => {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
 
-  // While checking authentication state, show nothing
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -25,12 +24,10 @@ const ProtectedRoute = ({ element }) => {
     );
   }
 
-  // If not authenticated, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  // If authenticated, render the component
   return element;
 };
 

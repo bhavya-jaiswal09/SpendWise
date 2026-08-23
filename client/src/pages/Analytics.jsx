@@ -8,7 +8,7 @@ const Analytics = () => {
   const [error, setError] = useState(null);
   const [expenses, setExpenses] = useState([]);
   const [budgets, setBudgets] = useState([]);
-  const [period, setPeriod] = useState('current'); // 'current' or 'previous'
+  const [period, setPeriod] = useState('current');
 
   useEffect(() => {
     const fetchAnalyticsData = async () => {
@@ -37,7 +37,6 @@ const Analytics = () => {
     const now = new Date();
     const currentMonthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     
-    // Calculate previous month
     const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const prevMonthStr = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}`;
     
@@ -51,7 +50,6 @@ const Analytics = () => {
 
   const targetMonthStr = period === 'current' ? monthInfo.current : monthInfo.previous;
 
-  // Filter data based on selected period
   const filteredExpenses = useMemo(() => {
     return expenses.filter(e => {
       if (!e.date) return false;
@@ -63,7 +61,6 @@ const Analytics = () => {
     return budgets.filter(b => b.month === targetMonthStr);
   }, [budgets, targetMonthStr]);
 
-  // Calculations
   const totalSpending = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
   const numTransactions = filteredExpenses.length;
   const averageExpense = numTransactions > 0 ? totalSpending / numTransactions : 0;
@@ -73,7 +70,6 @@ const Analytics = () => {
     largestExpense = Math.max(...filteredExpenses.map(e => e.amount));
   }
 
-  // Group by Category
   const categoryTotals = useMemo(() => {
     const totals = filteredExpenses.reduce((acc, expense) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
@@ -84,7 +80,6 @@ const Analytics = () => {
       .sort(([, a], [, b]) => b - a);
   }, [filteredExpenses]);
 
-  // Group by Week for Trend
   const weeklyTrend = useMemo(() => {
     const weeks = { 'Week 1': 0, 'Week 2': 0, 'Week 3': 0, 'Week 4': 0, 'Week 5+': 0 };
     let maxWeekly = 0;
@@ -134,7 +129,6 @@ const Analytics = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-800">Analytics</h1>
@@ -152,7 +146,6 @@ const Analytics = () => {
         </div>
       </div>
 
-      {/* Summary Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-5 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
@@ -221,7 +214,6 @@ const Analytics = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Top Spending Categories */}
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 flex flex-col">
             <div className="p-6 border-b border-slate-100">
               <h2 className="text-lg font-semibold text-slate-800">Spending by Category</h2>
@@ -258,7 +250,6 @@ const Analytics = () => {
           </div>
 
           <div className="flex flex-col gap-6">
-            {/* Spending Trend (Weekly) */}
             <div className="bg-white rounded-lg shadow-sm border border-slate-200">
               <div className="p-6 border-b border-slate-100">
                 <h2 className="text-lg font-semibold text-slate-800">Weekly Trend</h2>
@@ -266,14 +257,13 @@ const Analytics = () => {
               <div className="p-6 pt-8">
                 <div className="flex items-end justify-between h-40 gap-2">
                   {weeklyTrend.data.map(([week, amount]) => {
-                    // Avoid division by zero
                     const heightPercent = weeklyTrend.max > 0 ? (amount / weeklyTrend.max) * 100 : 0;
                     return (
                       <div key={week} className="flex flex-col items-center flex-1 group">
                         <div className="relative w-full flex justify-center h-full items-end">
                           <div 
                             className="w-12 sm:w-16 bg-purple-200 rounded-t-md relative group-hover:bg-purple-300 transition-colors"
-                            style={{ height: `${Math.max(heightPercent, 2)}%` }} // Minimum height for visibility
+                            style={{ height: `${Math.max(heightPercent, 2)}%` }}
                           >
                             {amount > 0 && (
                               <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs py-1 px-2 rounded pointer-events-none whitespace-nowrap z-10">
@@ -290,7 +280,6 @@ const Analytics = () => {
               </div>
             </div>
 
-            {/* Budget vs Spending */}
             <div className="bg-white rounded-lg shadow-sm border border-slate-200 flex-1">
               <div className="p-6 border-b border-slate-100">
                 <h2 className="text-lg font-semibold text-slate-800">Budget vs Actual</h2>

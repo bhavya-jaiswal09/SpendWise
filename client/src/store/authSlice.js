@@ -10,7 +10,6 @@ export const registerUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await authService.register(userData);
-      // Save token to localStorage
       authService.setToken(response.data.data.token);
       return response.data.data;
     } catch (error) {
@@ -26,7 +25,6 @@ export const loginUser = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
-      // Save token to localStorage
       authService.setToken(response.data.data.token);
       return response.data.data;
     } catch (error) {
@@ -41,17 +39,14 @@ export const restoreSession = createAsyncThunk(
   'auth/restoreSession',
   async (_, { rejectWithValue }) => {
     try {
-      // Check if token exists in localStorage
       const token = authService.getToken();
       if (!token || token === 'undefined') {
         return rejectWithValue('No token found');
       }
 
-      // Verify token is still valid by fetching current user
       const response = await authService.getCurrentUser();
       return response.data.data;
     } catch (error) {
-      // Token is invalid or expired
       authService.removeToken();
       return rejectWithValue('Session invalid or expired');
     }
@@ -89,13 +84,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    // Clear error message
     clearError: (state) => {
       state.error = null;
     },
   },
   extraReducers: (builder) => {
-    // Register
     builder
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
@@ -113,7 +106,6 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       });
 
-    // Login
     builder
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -131,7 +123,6 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       });
 
-    // Restore Session
     builder
       .addCase(restoreSession.pending, (state) => {
         state.isInitializing = true;
@@ -148,7 +139,6 @@ const authSlice = createSlice({
         state.user = null;
       });
 
-    // Logout
     builder
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;

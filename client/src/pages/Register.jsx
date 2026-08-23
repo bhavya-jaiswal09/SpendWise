@@ -17,14 +17,12 @@ const Register = () => {
 
   const [validationErrors, setValidationErrors] = useState({});
 
-  // Redirect to dashboard if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
 
-  // Clear error when component unmounts
   useEffect(() => {
     return () => {
       dispatch(clearError());
@@ -37,7 +35,6 @@ const Register = () => {
       ...prev,
       [name]: value,
     }));
-    // Clear validation error for this field
     if (validationErrors[name]) {
       setValidationErrors((prev) => ({
         ...prev,
