@@ -1,6 +1,7 @@
 import { apiRequest } from '../utils/api';
 
-const API_URL = 'http://localhost:5000/api/auth';
+const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, '');
+const API_URL = `${BASE_URL}/api/auth`;
 
 export const getToken = () => {
   return localStorage.getItem('authToken');

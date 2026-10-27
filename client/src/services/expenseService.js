@@ -1,6 +1,7 @@
 import { apiRequest } from '../utils/api';
 
-const API_URL = 'http://localhost:5000/api/expenses';
+const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, '');
+const API_URL = `${BASE_URL}/api/expenses`;
 
 export const getExpenses = () => {
   return apiRequest(API_URL, 'GET');
