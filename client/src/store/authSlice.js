@@ -14,7 +14,7 @@ export const registerUser = createAsyncThunk(
       return response.data.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || 'Registration failed'
+        error.response?.data?.message || error.message || 'Registration failed'
       );
     }
   }
@@ -29,7 +29,7 @@ export const loginUser = createAsyncThunk(
       return response.data.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || 'Login failed'
+        error.response?.data?.message || error.message || 'Login failed'
       );
     }
   }
